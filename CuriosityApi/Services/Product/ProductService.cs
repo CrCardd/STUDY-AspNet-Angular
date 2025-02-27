@@ -49,7 +49,6 @@ public class ProductService
 
     public Task<ApplicationProduct?> FindByUserId(Guid idUser)
     {
-        
         var product = 
             from p in ctx.Products
             where p.OwnerId == idUser
@@ -57,8 +56,20 @@ public class ProductService
         return product.FirstOrDefaultAsync();
     }
 
+    public async Task<ApplicationUser?> GetOwner(Guid idProduct)
+    {
+        
+        var product = 
+            from p in ctx.Products
+            where p.Id == idProduct
+            select p;
+        var user = product.FirstOrDefault()?.Owner;
+        return user;
+    }
+
     public Task<ApplicationProduct?> GetAll()
     {
         return ctx.Products;
     }
+
 }

@@ -1,5 +1,6 @@
 using CuriosityApi.Entities;
 using CuriosityApi.Services.Chat;
+using CuriosityApi.Services.Product;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CuriosityApi.Controllers;
@@ -8,10 +9,14 @@ namespace CuriosityApi.Controllers;
 [Route("chat")]
 public class ChatController
 (
-    IChatService chatService
+    IChatService chatService,
+    IProductService productService
 )
 : ControllerBase
 {  
-    [HttpPost("(idUserB)")]
-    public Task<IActionResult> InitChat
+    [HttpPost("(idProduct)")]
+    public Task<IActionResult> InitChat([FromRoute] Guid idProduct)
+    {
+        var idUserB = productService.GetOwner()
+    }
 }

@@ -9,6 +9,4 @@ public interface IProductService {
     Task<ApplicationProduct?> FindByName(string query);
     Task<ApplicationProduct?> FindByUserId(Guid idUser);
     Task<ApplicationProduct?> GetAll();
-    
-
 }
