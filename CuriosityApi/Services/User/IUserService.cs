@@ -1,10 +1,11 @@
 using CuriosityApi.Entities;
+using CuriosityApi.Models;
 
 namespace CuriosityApi.Services.User;
 public interface IUserService
 {
-    Task<ApplicationUser?> FindUserByEmail(string query);
-    Task<ApplicationUser?> FindUserByUsername(string query);
-    Task<ApplicationUser?> FindUserByNameOrEmail(string query);  
-    Task<ApplicationUser?> FindById(Guid id);  
+    Task<UserModel?> GetUserByEmail(string query);
+    Task<UserModel?> GetUserByUsername(string query);
+    Task<UserModel?> GetUserByNameOrEmail(string query);  
+    Task<UserModel?> GetById(Guid id);  
 }

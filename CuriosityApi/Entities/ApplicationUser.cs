@@ -10,4 +10,5 @@ public class ApplicationUser
     public ICollection<ApplicationFollow> Following {get;set;} = [];
     public ICollection<ApplicationProduct> Products {get;set;} = [];
     public ICollection<ApplicationCart> Carts {get;set;} = [];
+    public ICollection<ApplicationChat> Chats {get;set;} = [];
 }

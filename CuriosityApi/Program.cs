@@ -8,6 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations.Builders;
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MainPolicy", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:") // URL DO FRONT
+            .WithHeaders("**")
+            .WithMethods("**");
+    });
+});
+
 builder.Services
     .AddJWTAuthentication(builder.Configuration)
     .AddDbContext<CuriosityDbContext>(Options => {

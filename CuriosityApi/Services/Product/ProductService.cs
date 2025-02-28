@@ -1,5 +1,6 @@
 using CuriosityApi.Entities;
 using CuriosityApi.Models;
+using CuriosityApi.Repositories.Product;
 using CuriosityApi.Services.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,14 +8,14 @@ namespace CuriosityApi.Services.Product;
 
 public class ProductService
 (
-    IUserService userService,
+    IUserRepository userRepository,
     CuriosityDbContext ctx
 )
 : IProductService
 {
-    public async Task<ApplicationProduct?> Create(ProductModel data, Guid idUser)
+    public async Task<ProductModel?> Create(ProductModel data, Guid idUser)
     {
-        var user = await userService.FindById(idUser);
+        var user = await userRepository.FindById(idUser);
         if(user is null)
             return null;
          var newProduct = new ApplicationProduct {
@@ -26,50 +27,72 @@ public class ProductService
         };
         ctx.Add(newProduct);
         await ctx.SaveChangesAsync();
-        return newProduct;
+
+        return new ProductModel(newProduct.Name, newProduct.Description, newProduct.Price);
     }
 
-    public Task<ApplicationProduct?> FindById(Guid idProduct)
+    public async Task<ProductModel?> GetById(Guid idProduct)
     {
-        var product = 
+        var query = 
             from p in ctx.Products
             where p.Id == idProduct
             select p;
-        return product.FirstOrDefaultAsync();
+
+        var product = await query.FirstOrDefaultAsync();
+        if(product is null)
+            return null;
+
+        return new ProductModel(product.Name, product.Description, product.Price);
     }
 
-    public Task<ApplicationProduct?> FindByName(string query)
+    public async Task<ProductModel?> GetByName(string name)
     {
-        var product = 
+        var query = 
             from p in ctx.Products
-            where p.Name == query
+            where p.Name == name
             select p;
-        return product.FirstOrDefaultAsync();
+
+        var product = await query.FirstOrDefaultAsync();
+        if(product is null)
+            return null;
+
+        return new ProductModel(product.Name, product.Description, product.Price);
     }
 
-    public Task<ApplicationProduct?> FindByUserId(Guid idUser)
+    public async Task<ProductModel?> GetByUserId(Guid idUser)
     {
-        var product = 
+        var query = 
             from p in ctx.Products
             where p.OwnerId == idUser
             select p;
-        return product.FirstOrDefaultAsync();
+
+        var product = await query.FirstOrDefaultAsync();
+        if(product is null)
+            return null;
+
+        return new ProductModel(product.Name, product.Description, product.Price);
     }
 
-    public async Task<ApplicationUser?> GetOwner(Guid idProduct)
+    public async Task<UserModel?> GetOwner(Guid idProduct)
     {
         
-        var product = 
+        var query = 
             from p in ctx.Products
             where p.Id == idProduct
-            select p;
-        var user = product.FirstOrDefault()?.Owner;
-        return user;
+            select p.Owner;
+
+        var user = await query.FirstOrDefaultAsync();
+        if(user is null)
+            return null;
+
+        return new UserModel( user.Id, user.Username);
     }
 
     public Task<ApplicationProduct?> GetAll()
     {
-        return ctx.Products;
+        throw new NotImplementedException();
+        // return ctx.Products;
     }
+
 
 }
