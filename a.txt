@@ -1,0 +1,11 @@
+CuriosityApi.Controllers
+	AddProduct()
+
+CuriosityApi.Services.Cart
+	CartService
+		AddProduct()
+
+CuriosityApi.Services.Product
+	ProductService
+		GetAll()
+
